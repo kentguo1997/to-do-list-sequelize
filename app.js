@@ -15,12 +15,35 @@ app.set('view engine', 'hbs')
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 
-
+// setting routes
+// Home
 app.get('/', (req, res) => {
-  res.send('Hello World')
+  res.render('index')
+})
+
+// Login, Logout & Register
+app.get('/users/login', (req, res) => {
+  res.render('login')
+})
+
+app.post('/users/login', (req, res) => {
+  res.send('login')
+})
+
+app.get('/users/register', (req, res) => {
+  res.render('register')
+})
+
+app.post('/users/register', (re, res) => {
+  res.send('register')
+})
+
+app.get('/users/logout', (req, res) => {
+  res.send('logout')
 })
 
 
+// start the server 
 app.listen(port, () => {
   console.log(`The server is listening on http://localhost:${port}`)
 })
