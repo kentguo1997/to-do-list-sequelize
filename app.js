@@ -19,10 +19,17 @@ app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 
 // setting routes
+
 // Home
 app.get('/', (req, res) => {
-  res.render('index')
+  return Todo.findAll({
+    raw: true,
+    nest: true
+  })
+    .then((todos) => { return res.render('index', { todos: todos }) })
+    .catch((error) => { return res.status(422).json(error) })
 })
+
 
 // Login
 app.get('/users/login', (req, res) => {
