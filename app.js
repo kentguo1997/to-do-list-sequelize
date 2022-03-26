@@ -1,13 +1,23 @@
 const express = require('express')
+
+const session = require('express-session')
+const passportUse = require('./config/passport')
+const passport = require('passport')
+
 const exphbs= require('express-handlebars')
 const methodOverride = require('method-override')
 const bcrypt = require('bcryptjs')
-const app = express()
-const port = 3000
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 
 const db = require('./models')
 const Todo = db.Todo
 const User = db.User
+
+const app = express()
+const port = process.env.PORT
 
 app.engine('hbs', exphbs({
   defaultLayout: 'main', extname:'.hbs'
@@ -15,8 +25,17 @@ app.engine('hbs', exphbs({
 app.set('view engine', 'hbs')
 
 
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true
+}))
+passportUse(app)
+
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
+
+
 
 // setting routes
 
@@ -45,9 +64,10 @@ app.get('/users/login', (req, res) => {
   res.render('login')
 })
 
-app.post('/users/login', (req, res) => {
-  res.send('login')
-})
+app.post('/users/login', passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/users/login'
+}))
 
 // Register
 app.get('/users/register', (req, res) => {
