@@ -98,7 +98,7 @@ app.post('/users/register', (req, res) => {
                password: hash
              })
            })
-           .then(() => res.redirect('/'))
+           .then(() => res.redirect('/users/login'))
            .catch(err => console.log(err))
   })
 })

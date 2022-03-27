@@ -1,5 +1,5 @@
 <form action="/todos/{{ todo.id }}?_method=DELETE" method="POST" style="display: inline;">
-  <div class="input-group">
+  <div class="input-group mt-3">
     <div class="input-group-text">
       <input type="checkbox" class="form-check-input mt-0" name="isDone" {{#if todo.isDone }} checked {{/if}} disabled>
     </div>
