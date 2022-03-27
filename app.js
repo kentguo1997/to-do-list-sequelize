@@ -49,6 +49,25 @@ app.get('/', (req, res) => {
     .catch((error) => { return res.status(422).json(error) })
 })
 
+// create new to-to
+app.get('/todos/new', (req, res) => {
+  res.render('new')
+})
+
+app.post('/todos', (req, res) => {
+  const name = req.body.name
+
+  return Todo.create({
+    name,
+    UserId: 9,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  })
+  .then(() => res.redirect('/'))
+  .catch(err => console.log(err))
+})
+
+
 // show details of every to-do
 app.get('/todos/:id', (req, res) => {
   const id = req.params.id
