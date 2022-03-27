@@ -16,6 +16,7 @@ require('./models')
 
 
 const routes = require('./routes')
+const res = require('express/lib/response')
 const app = express()
 const port = process.env.PORT
 
@@ -34,6 +35,12 @@ passportUse(app)
 
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
+
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.isAuthenticated
+  res.locals.user = req.user
+  next()
+})
 
 app.use(routes)
 

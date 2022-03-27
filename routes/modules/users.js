@@ -55,7 +55,8 @@ router.post('/register', (req, res) => {
 
 // Logout
 router.get('/logout', (req, res) => {
-  res.send('logout')
+  req.logOut()
+  return res.redirect('/users/login')
 })
 
 
