@@ -108,6 +108,20 @@ app.put('/todos/:id', (req, res) => {
 })
 
 
+// delete to-do
+
+app.delete('/todos/:id', (req, res) => {
+  const id = req.params.id
+
+  Todo.findByPk(id)
+  .then(todo => {
+    return todo.destroy()
+  })
+  .then(() => res.redirect('/'))
+  .catch(err => console.log(err))
+})
+
+
 
 
 // Login
