@@ -4,7 +4,6 @@ const router = express.Router()
 
 const db = require('../../models')
 const Todo = db.Todo
-const User = db.User
 
 
 // setting routes ('/todos')
@@ -15,10 +14,11 @@ router.get('/new', (req, res) => {
 
 router.post('/', (req, res) => {
   const name = req.body.name
+  const UserId = req.user.id
 
   return Todo.create({
     name,
-    UserId: 9,
+    UserId,
     createdAt: new Date(),
     updatedAt: new Date()
   })
@@ -30,8 +30,9 @@ router.post('/', (req, res) => {
 // show details of every to-do
 router.get('/:id', (req, res) => {
   const id = req.params.id
+  const UserId = req.user.id
 
-  return Todo.findByPk(id)
+  return Todo.findOne({ where: { UserId, id } })
     .then(todo => res.render('detail', { todo: todo.toJSON() }))
     .catch(error => console.log(error))
 })
@@ -40,8 +41,9 @@ router.get('/:id', (req, res) => {
 // edit to-do
 router.get('/:id/edit', (req, res) => {
   const id = req.params.id
+  const UserId = req.user.id
 
-  Todo.findByPk(id)
+  return Todo.findOne({ where: { UserId, id } })
     .then(todo => {
       res.render('edit', { todo: todo.toJSON() })
     })
@@ -51,8 +53,9 @@ router.get('/:id/edit', (req, res) => {
 router.put('/:id', (req, res) => {
   const id = req.params.id
   const { name, isDone } = req.body
+  const UserId = req.user.id
 
-  Todo.findByPk(id)
+  Todo.findOne({ where: { UserId, id } })
     .then(todo => {
       todo.id = id
       todo.name = name
@@ -70,8 +73,9 @@ router.put('/:id', (req, res) => {
 // delete to-do
 router.delete('/:id', (req, res) => {
   const id = req.params.id
+  const UserId = req.user.id
 
-  Todo.findByPk(id)
+  Todo.findOne({ where: { UserId, id } })
     .then(todo => {
       return todo.destroy()
     })
