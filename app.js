@@ -56,7 +56,7 @@ app.get('/todos/new', (req, res) => {
 
 app.post('/todos', (req, res) => {
   const name = req.body.name
-
+  
   return Todo.create({
     name,
     UserId: 9,
@@ -76,6 +76,38 @@ app.get('/todos/:id', (req, res) => {
     .then(todo => res.render('detail', { todo: todo.toJSON() }))
     .catch(error => console.log(error))
 })
+
+
+// edit to-do
+app.get('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  
+  Todo.findByPk(id)
+  .then(todo => {
+    res.render('edit', { todo: todo.toJSON() })
+  })
+  .catch(err => console.log(err))
+})
+
+app.put('/todos/:id', (req, res) => {
+  const id = req.params.id
+  const { name, isDone } = req.body
+
+  Todo.findByPk(id)
+  .then(todo => {
+    todo.id = id
+    todo.name = name
+    todo.isDone = isDone === 'on'
+    todo.updatedAt = new Date()
+
+    return todo.save()
+  })
+  .then(() => res.redirect(`/todos/${id}`))
+  .catch(err => console.log(err))
+
+})
+
+
 
 
 // Login
