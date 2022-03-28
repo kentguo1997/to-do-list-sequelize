@@ -20,6 +20,7 @@ module.exports = {
         ({
           name: `name-${i}`,
           UserId: userId,
+          dueDate: new Date(),
           createdAt: new Date(),
           updatedAt: new Date()
         })
