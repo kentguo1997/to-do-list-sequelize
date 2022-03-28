@@ -6,6 +6,8 @@ const db = require('../../models')
 const Todo = db.Todo
 
 
+
+
 // setting routes ('/todos')
 // create new to-to
 router.get('/new', (req, res) => {
@@ -15,6 +17,12 @@ router.get('/new', (req, res) => {
 router.post('/', (req, res) => {
   const { name, dueDate } = req.body
   const UserId = req.user.id
+  let inputError = ''
+
+  if(!name || !dueDate){
+    inputError = 'Please fill out the form!'
+    return res.render('new', {inputError, name, dueDate})
+  }
 
   return Todo.create({
     name,
