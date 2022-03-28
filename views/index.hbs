@@ -1,5 +1,20 @@
-{{!-- Create btn --}}
-<a class="btn btn-outline-secondary mx-2 mt-3 mb-3" href="/todos/new">Create</a>
+<div class="d-flex justify-content-between">
+  {{!-- Create btn --}}
+  <a class="btn btn-outline-secondary mx-2 mt-3 mb-3" href="/todos/new">Create</a>
+  
+  {{!-- sort the todos by deadline --}}
+  <div class="dropdown col d-grid gap-2 mx-2 mt-3 mb-3" style="max-width:fit-content;">
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+      data-bs-toggle="dropdown" aria-expanded="false">
+      Month
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+      {{#each deadlineMonth}}
+      <li><a class="dropdown-item" href="/todos/deadline/{{this}}">{{this}}</a></li>
+      {{/each}}
+    </ul>
+  </div>
+</div>
 
 {{!-- Get todos(array) from app.js('/')'s routing (Show all todos on index page)--}}
 <ul class="list-group">

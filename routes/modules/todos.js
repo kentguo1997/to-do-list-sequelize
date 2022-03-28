@@ -94,5 +94,37 @@ router.delete('/:id', (req, res) => {
 })
 
 
+// sort by the deadline of month
+router.get('/deadline/:month', (req, res) => {
+  const month = req.params.month
+  const UserId = req.user.id
+  const showTodos = []
+  const deadlineMonth = []
+
+  Todo.findAll({
+    where: { UserId }, raw: true, nest: true, order: [
+      ['dueDate', 'ASC'],
+    ] })
+  .then(todos => {
+    todos.forEach(todo => {
+      const todoDueMonth = todo.dueDate.slice(0, 7).toString()
+
+      if(todoDueMonth === month){
+        showTodos.push(todo)
+      }
+      if(!deadlineMonth.includes(todoDueMonth)){
+        deadlineMonth.push(todoDueMonth)
+      }
+    })
+
+    res.render('index', {
+      deadlineMonth,
+      todos: showTodos
+    })
+  })
+  .catch(err => console.log(err))
+})
+
+
 // export
 module.exports = router
