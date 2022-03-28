@@ -1,6 +1,13 @@
 <form action="/todos" method="POST" style="display: inline;">
-  <div class="input-group mt-3">
-    <input class="form-control" type="text" placeholder="input todo's name" name="name">
-    <button class="btn btn-success" type="submit">Create</button>
+  <div class="input-group mt-3 d-flex justify-content-center align-items-center mx-3">
+    <label for="name">To-Do's Name</label>
+    <input class="form-control mx-3" type="text" placeholder="input todo's name" id="name" name="name">
+  </div>
+  <div class="input-group mt-3 d-flex justify-content-center align-items-center mx-3">
+    <label for="dueDate">To-Do's Deadline</label>
+    <input class="form-control mx-3" type="date" id="dueDate" name="dueDate">
+  </div>
+  <div class="d-flex justify-content-end">
+    <button class="btn btn-outline-secondary mt-2 mx-2 text-right" type="submit">Create</button>
   </div>
 </form>

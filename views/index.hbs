@@ -1,5 +1,5 @@
 {{!-- Create btn --}}
-<a class="btn btn-primary mb-3" href="/todos/new">Create</a>
+<a class="btn btn-outline-secondary mx-2 mt-3 mb-3" href="/todos/new">Create</a>
 
 {{!-- Get todos(array) from app.js('/')'s routing (Show all todos on index page)--}}
 <ul class="list-group">
@@ -12,6 +12,7 @@
         <h4 style="display: inline; vertical-align: middle;">{{this.name}}</h4>
       </div>
       <div class="col-auto">
+        <h4 style="display: inline; vertical-align: middle; font-weight: bolder; color: #FF5F5D" class="mx-5"><span style="color: black; font-weight: normal;">Deadline: </span>{{this.dueDate}}</h4>
         <a class="btn btn-secondary" href="/todos/{{this.id}}">Detail</a>
         <a class="btn btn-success" href="/todos/{{this.id}}/edit">Edit</a>
         <form action="/todos/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">

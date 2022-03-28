@@ -4,6 +4,8 @@
       <input type="checkbox" class="form-check-input mt-0" name="isDone" {{#if todo.isDone }} checked {{/if}} disabled>
     </div>
     <input class="form-control" type="text" placeholder="name" name="name" value="{{ todo.name }}" disabled>
+    <button class="btn btn-secondary" disabled>Deadline :</button>
+    <input class="form-control" type="date" name="dueDate" value="{{ todo.dueDate }}" disabled>
     <a class="btn btn-success" href="/todos/{{ todo.id }}/edit">edit</a>
     <button class="btn btn-danger" type="submit">delete</button>
   </div>

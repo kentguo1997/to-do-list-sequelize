@@ -13,11 +13,12 @@ router.get('/new', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-  const name = req.body.name
+  const { name, dueDate } = req.body
   const UserId = req.user.id
 
   return Todo.create({
     name,
+    dueDate,
     UserId,
     createdAt: new Date(),
     updatedAt: new Date()
@@ -52,7 +53,7 @@ router.get('/:id/edit', (req, res) => {
 
 router.put('/:id', (req, res) => {
   const id = req.params.id
-  const { name, isDone } = req.body
+  const { name, isDone, dueDate } = req.body
   const UserId = req.user.id
 
   Todo.findOne({ where: { UserId, id } })
@@ -60,6 +61,7 @@ router.put('/:id', (req, res) => {
       todo.id = id
       todo.name = name
       todo.isDone = isDone === 'on'
+      todo.dueDate = dueDate
       todo.updatedAt = new Date()
 
       return todo.save()
