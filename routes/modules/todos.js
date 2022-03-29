@@ -5,7 +5,7 @@ const router = express.Router()
 const db = require('../../models')
 const Todo = db.Todo
 
-
+let inputError = ''
 
 
 // setting routes ('/todos')
@@ -17,8 +17,7 @@ router.get('/new', (req, res) => {
 router.post('/', (req, res) => {
   const { name, dueDate } = req.body
   const UserId = req.user.id
-  let inputError = ''
-
+  
   if(!name || !dueDate){
     inputError = 'Please fill out the form!'
     return res.render('new', {inputError, name, dueDate})
@@ -66,15 +65,21 @@ router.put('/:id', (req, res) => {
 
   Todo.findOne({ where: { UserId, id } })
     .then(todo => {
+      if (!name || !dueDate) {
+        inputError = 'Please fill out the form!'
+        return res.render('edit', {
+          inputError, todo: todo.toJSON()
+        })
+      }
+
       todo.id = id
       todo.name = name
       todo.isDone = isDone === 'on'
       todo.dueDate = dueDate
       todo.updatedAt = new Date()
 
-      return todo.save()
+      return todo.save().then(() => res.redirect(`/todos/${id}`))
     })
-    .then(() => res.redirect(`/todos/${id}`))
     .catch(err => console.log(err))
 
 })
