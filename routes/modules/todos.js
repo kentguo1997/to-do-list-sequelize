@@ -1,26 +1,27 @@
 const express = require('express')
 const router = express.Router()
 
-
 const db = require('../../models')
 const Todo = db.Todo
 
 let inputError = ''
 
-
 // setting routes ('/todos')
 // today's to-do
 router.get('/today', (req, res) => {
   const today = date => {
-    return require('moment')(date).format('YYYY-MM-DD');
+    return require('moment')(date).format('YYYY-MM-DD')
   }
   const UserId = req.user.id
   const deadlineMonth = []
   const todayTodos = []
-  
+
   return Todo.findAll({
-    where: { UserId }, raw: true, nest: true, order: [
-      ['dueDate', 'ASC'],
+    where: { UserId },
+    raw: true,
+    nest: true,
+    order: [
+      ['dueDate', 'ASC']
     ]
   })
     .then((todos) => {
@@ -38,7 +39,6 @@ router.get('/today', (req, res) => {
     .catch((error) => { return res.status(422).json(error) })
 })
 
-
 // create new to-to
 router.get('/new', (req, res) => {
   res.render('new')
@@ -47,10 +47,10 @@ router.get('/new', (req, res) => {
 router.post('/', (req, res) => {
   const { name, dueDate } = req.body
   const UserId = req.user.id
-  
-  if(!name || !dueDate){
+
+  if (!name || !dueDate) {
     inputError = 'Please fill out the form!'
-    return res.render('new', {inputError, name, dueDate})
+    return res.render('new', { inputError, name, dueDate })
   }
 
   return Todo.create({
@@ -64,7 +64,6 @@ router.post('/', (req, res) => {
     .catch(err => console.log(err))
 })
 
-
 // show details of every to-do
 router.get('/:id', (req, res) => {
   const id = req.params.id
@@ -74,7 +73,6 @@ router.get('/:id', (req, res) => {
     .then(todo => res.render('detail', { todo: todo.toJSON() }))
     .catch(error => console.log(error))
 })
-
 
 // edit to-do
 router.get('/:id/edit', (req, res) => {
@@ -111,9 +109,7 @@ router.put('/:id', (req, res) => {
       return todo.save().then(() => res.redirect(`/todos/${id}`))
     })
     .catch(err => console.log(err))
-
 })
-
 
 // delete to-do
 router.delete('/:id', (req, res) => {
@@ -128,7 +124,6 @@ router.delete('/:id', (req, res) => {
     .catch(err => console.log(err))
 })
 
-
 // sort by the deadline of month
 router.get('/deadline/:month', (req, res) => {
   const month = req.params.month
@@ -137,29 +132,32 @@ router.get('/deadline/:month', (req, res) => {
   const deadlineMonth = []
 
   Todo.findAll({
-    where: { UserId }, raw: true, nest: true, order: [
-      ['dueDate', 'ASC'],
-    ] })
-  .then(todos => {
-    todos.forEach(todo => {
-      const todoDueMonth = todo.dueDate.slice(0, 7).toString()
-
-      if(todoDueMonth === month){
-        showTodos.push(todo)
-      }
-      if(!deadlineMonth.includes(todoDueMonth)){
-        deadlineMonth.push(todoDueMonth)
-      }
-    })
-
-    res.render('index', {
-      deadlineMonth,
-      todos: showTodos
-    })
+    where: { UserId },
+    raw: true,
+    nest: true,
+    order: [
+      ['dueDate', 'ASC']
+    ]
   })
-  .catch(err => console.log(err))
-})
+    .then(todos => {
+      todos.forEach(todo => {
+        const todoDueMonth = todo.dueDate.slice(0, 7).toString()
 
+        if (todoDueMonth === month) {
+          showTodos.push(todo)
+        }
+        if (!deadlineMonth.includes(todoDueMonth)) {
+          deadlineMonth.push(todoDueMonth)
+        }
+      })
+
+      res.render('index', {
+        deadlineMonth,
+        todos: showTodos
+      })
+    })
+    .catch(err => console.log(err))
+})
 
 // export
 module.exports = router

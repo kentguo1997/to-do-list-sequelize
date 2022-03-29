@@ -17,13 +17,13 @@ module.exports = {
     }], {})
       .then(userId => queryInterface.bulkInsert('Todos',
         Array.from({ length: 10 }).map((_, i) =>
-        ({
-          name: `name-${i}`,
-          UserId: userId,
-          dueDate: new Date(),
-          createdAt: new Date(),
-          updatedAt: new Date()
-        })
+          ({
+            name: `name-${i}`,
+            UserId: userId,
+            dueDate: new Date(),
+            createdAt: new Date(),
+            updatedAt: new Date()
+          })
         ), {}))
   },
   down: (queryInterface, Sequelize) => {

@@ -4,9 +4,7 @@ const passport = require('passport')
 const bcrypt = require('bcryptjs')
 
 const db = require('../../models')
-const Todo = db.Todo
 const User = db.User
-
 
 // setting routes ('/users')
 // Login
@@ -29,22 +27,23 @@ router.post('/register', (req, res) => {
   const { name, email, password, confirmPassword } = req.body
   const errors = []
 
-  if(!name || !email || !password || !confirmPassword){
-    errors.push( { message: 'Please fill out the form!' } )
+  if (!name || !email || !password || !confirmPassword) {
+    errors.push({ message: 'Please fill out the form!' })
   }
 
-  if(password !== confirmPassword){
-    errors.push( {message: 'Password do not match confirmPassword!'} )
+  if (password !== confirmPassword) {
+    errors.push({ message: 'Password do not match confirmPassword!' })
   }
 
   if (errors.length) {
     return res.render('register', {
-    name,
-    email,
-    password,
-    confirmPassword,
-    errors
-  })}
+      name,
+      email,
+      password,
+      confirmPassword,
+      errors
+    })
+  }
 
   User.findOne({ where: { email } })
     .then(user => {
@@ -79,7 +78,6 @@ router.get('/logout', (req, res) => {
   req.flash('success_msg', 'Logged out successfully!')
   res.redirect('/users/login')
 })
-
 
 // export
 module.exports = router

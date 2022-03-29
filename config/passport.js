@@ -9,7 +9,7 @@ module.exports = app => {
   // Initialization
   app.use(passport.initialize())
   app.use(passport.session())
-  
+
   // Passport Local Strategy
   passport.use(new LocalStrategy({ usernameField: 'email', passReqToCallback: true }, (req, email, password, done) => {
     User.findOne({ where: { email } })
@@ -26,7 +26,6 @@ module.exports = app => {
       })
       .catch(err => done(err, false))
   }))
-  
 
   // Passport Facebook Strategy
   passport.use(new FacebookStrategy({
@@ -36,28 +35,27 @@ module.exports = app => {
     profileFields: ['email', 'displayName']
   }, (accessToken, refreshToken, profile, done) => {
     const { name, email } = profile._json
-    
-    User.findOne({ where: {email} })
-    .then(user => {
-      if(user){
-        return done(null, user)
-      }
-      
-      const randomPassword = Math.random().toString(36).slice(-8)
-      return bcrypt.genSalt(10)
-        .then(salt => bcrypt.hash(randomPassword, salt))
-        .then(hash => {
-          User.create({
-            name,
-            email,
-            password: hash
-          })
-        })
-        .then(user => done(null, user))
-        .catch(err => console.log(err))
-    })
-  }))
 
+    User.findOne({ where: { email } })
+      .then(user => {
+        if (user) {
+          return done(null, user)
+        }
+
+        const randomPassword = Math.random().toString(36).slice(-8)
+        return bcrypt.genSalt(10)
+          .then(salt => bcrypt.hash(randomPassword, salt))
+          .then(hash => {
+            User.create({
+              name,
+              email,
+              password: hash
+            })
+          })
+          .then(user => done(null, user))
+          .catch(err => console.log(err))
+      })
+  }))
 
   // serialization & deserialization
   passport.serializeUser((user, done) => {
@@ -70,7 +68,4 @@ module.exports = app => {
         done(null, user)
       }).catch(err => done(err, null))
   })
-
-
-
 }
