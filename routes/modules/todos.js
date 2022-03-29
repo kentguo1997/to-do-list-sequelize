@@ -9,6 +9,36 @@ let inputError = ''
 
 
 // setting routes ('/todos')
+// today's to-do
+router.get('/today', (req, res) => {
+  const today = date => {
+    return require('moment')(date).format('YYYY-MM-DD');
+  }
+  const UserId = req.user.id
+  const deadlineMonth = []
+  const todayTodos = []
+  
+  return Todo.findAll({
+    where: { UserId }, raw: true, nest: true, order: [
+      ['dueDate', 'ASC'],
+    ]
+  })
+    .then((todos) => {
+      todos.forEach(todo => {
+        const todoMonth = todo.dueDate.slice(0, 7)
+        if (!deadlineMonth.includes(todoMonth)) {
+          deadlineMonth.push(todoMonth)
+        }
+        if (todo.dueDate === today(new Date())) {
+          todayTodos.push(todo)
+        }
+      })
+      return res.render('index', { todos: todayTodos, deadlineMonth })
+    })
+    .catch((error) => { return res.status(422).json(error) })
+})
+
+
 // create new to-to
 router.get('/new', (req, res) => {
   res.render('new')
